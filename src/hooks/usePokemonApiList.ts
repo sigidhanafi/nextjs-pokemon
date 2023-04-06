@@ -18,13 +18,16 @@ export default function usePokemonApiList(initialPage: number) {
   const [page, setPage] = useState(initialPage);
 
   const fetchPokemonList = (page: number): Promise<PokemonListResponse> =>
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=12&offset=" + page * 12, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-cache",
-      },
-    })
+    fetch(
+      "https://pokeapi.co/api/v2/pokemon?limit=12&offset=" + (page - 1) * 12,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
+      }
+    )
       .then((res) => res.json())
       .then((response) => {
         const pokemontList = response.results.map(

@@ -12,7 +12,7 @@ const Pagination = (props: {
       >
         Prev
       </button>
-      <span>{props.page + 1}</span>
+      <span>{props.page}</span>
       <button
         className="bg-blue-200 px-2 rounded-md text-center"
         onClick={props.onNext}
