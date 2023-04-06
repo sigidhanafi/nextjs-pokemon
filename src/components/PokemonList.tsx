@@ -5,6 +5,7 @@ import usePokemonApiList from "../hooks/usePokemonApiList";
 import Pagination from "./Pagination";
 
 import PokemonCard from "./PokemonCard";
+import PokemonCardShimmer from "./PokemonCardShimmer";
 
 const PokemonList = () => {
   const router = useRouter();
@@ -52,7 +53,7 @@ const PokemonList = () => {
   if (isLoading || isFetching) {
     return (
       <div className="flex w-full flex-wrap">
-        <p>Loading content</p>
+        <PokemonCardShimmer />
       </div>
     );
   }
