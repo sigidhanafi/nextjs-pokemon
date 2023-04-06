@@ -2,8 +2,8 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-import usePokemonApiDetail from "../hooks/usePokemonApiDetail";
-import usePokemonApiDescription from "../hooks/usePokemonApiDescription";
+import usePokemonApiDetail from "../../hooks/usePokemonApiDetail";
+import usePokemonApiDescription from "../../hooks/usePokemonApiDescription";
 
 const PokemonDetail = () => {
   const router = useRouter();

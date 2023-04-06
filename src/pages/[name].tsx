@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useQuery } from "react-query";
 
-import PokemonDetail from "@/components/PokemonDetail";
+import PokemonDetail from "@/components/detail/PokemonDetail";
 
 const DetailPage = () => {
   return (

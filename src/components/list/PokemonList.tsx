@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import usePokemonApiList from "../hooks/usePokemonApiList";
-import Pagination from "./Pagination";
+import usePokemonApiList from "../../hooks/usePokemonApiList";
+import Pagination from "../commons/Pagination";
 
 import PokemonCard from "./PokemonCard";
 import PokemonCardShimmer from "./PokemonCardShimmer";

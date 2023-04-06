@@ -46,6 +46,10 @@ export default function usePokemonApiList(initialPage: number) {
       });
 
   useEffect(() => {
+    if (initialPage <= 0) {
+      setPage(1);
+      return;
+    }
     setPage(initialPage);
   }, [initialPage]);
 
