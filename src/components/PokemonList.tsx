@@ -1,12 +1,37 @@
 import { useEffect } from "react";
+import { useRouter } from "next/router";
 
 import usePokemonApiList from "../hooks/usePokemonApiList";
+import Pagination from "./Pagination";
 
 import PokemonCard from "./PokemonCard";
 
 const PokemonList = () => {
-  const { data, isLoading, error, isSuccess, isPreviousData, setPage } =
-    usePokemonApiList();
+  const router = useRouter();
+  const {
+    query: { page: queryPage },
+  } = router;
+
+  let initialPage = 0;
+  if (
+    queryPage &&
+    queryPage != "" &&
+    queryPage != undefined &&
+    !Array.isArray(queryPage)
+  ) {
+    initialPage = parseInt(queryPage);
+  }
+
+  const {
+    data,
+    isLoading,
+    isFetching,
+    error,
+    isSuccess,
+    isPreviousData,
+    page,
+    setPage,
+  } = usePokemonApiList(initialPage);
 
   // useEffect(() => {
   //   const handleScroll = () => {
@@ -24,7 +49,7 @@ const PokemonList = () => {
   //   return () => window.removeEventListener("scroll", handleScroll);
   // });
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <div className="flex w-full flex-wrap">
         <p>Loading content</p>
@@ -39,8 +64,6 @@ const PokemonList = () => {
       </div>
     );
   }
-
-  console.log("isPreviousData", isPreviousData, data?.results);
 
   if (isSuccess && data) {
     return (
@@ -59,16 +82,23 @@ const PokemonList = () => {
               );
             })}
         </div>
-        <div className="flex justify-center">
-          <button
-            className="bg-blue-200 px-4 rounded-md"
-            onClick={() => {
-              setPage((oldPage) => oldPage + 1);
-            }}
-          >
-            Load more
-          </button>
-        </div>
+        <Pagination
+          page={page}
+          onNext={() => {
+            setPage((oldPage) => {
+              const nextPage = oldPage + 1;
+              router.push("/?page=" + nextPage);
+              return nextPage;
+            });
+          }}
+          onPrev={() => {
+            setPage((oldPage) => {
+              const prevPage = oldPage - 1;
+              router.push("/?page=" + prevPage);
+              return prevPage;
+            });
+          }}
+        />
       </div>
     );
   }

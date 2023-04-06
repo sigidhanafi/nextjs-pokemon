@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
 interface PokemonListData {
@@ -14,10 +14,11 @@ interface PokemonListResponse {
   results: PokemonListData[];
 }
 
-export default function usePokemonApiList() {
-  const [page, setPage] = useState(0);
+export default function usePokemonApiList(initialPage: number) {
+  const [page, setPage] = useState(initialPage);
+
   const fetchPokemonList = (page: number): Promise<PokemonListResponse> =>
-    fetch("https://pokeapi.co/api/v2/pokemon?limit=10&offset=" + page * 10, {
+    fetch("https://pokeapi.co/api/v2/pokemon?limit=12&offset=" + page * 12, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -41,11 +42,25 @@ export default function usePokemonApiList() {
         return { ...response, results: pokemontList };
       });
 
-  const { isLoading, error, data, isSuccess, isPreviousData } = useQuery({
-    queryKey: ["fetchPokemonList", page],
-    queryFn: () => fetchPokemonList(page),
-    keepPreviousData: true,
-  });
+  useEffect(() => {
+    setPage(initialPage);
+  }, [initialPage]);
 
-  return { isLoading, error, data, isSuccess, isPreviousData, page, setPage };
+  const { isLoading, isFetching, error, data, isSuccess, isPreviousData } =
+    useQuery({
+      queryKey: ["fetchPokemonList", page],
+      queryFn: () => fetchPokemonList(page),
+      keepPreviousData: true,
+    });
+
+  return {
+    isLoading,
+    isFetching,
+    error,
+    data,
+    isSuccess,
+    isPreviousData,
+    page,
+    setPage,
+  };
 }
