@@ -1,9 +1,10 @@
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-import usePokemonApiList from "../../hooks/usePokemonApiList";
-import Pagination from "../commons/Pagination";
+import { Pokemon } from "../../models/pokemon";
 
+import usePokemonApiList from "../../hooks/usePokemonApiList";
+
+import Pagination from "../commons/Pagination";
 import PokemonCard from "./PokemonCard";
 import PokemonCardShimmer from "./PokemonCardShimmer";
 
@@ -60,8 +61,11 @@ const PokemonList = () => {
 
   if (error) {
     return (
-      <div className="flex w-full flex-wrap">
-        <p>Error</p>
+      <div className="flex flex-col justify-center items-center w-full h-96">
+        <span className="text-gray-500">
+          Error when fetch the pokemon data.
+        </span>
+        <span className="text-gray-500">Please try again.</span>
       </div>
     );
   }
@@ -76,8 +80,8 @@ const PokemonList = () => {
               return (
                 <PokemonCard
                   key={pokemon.name}
-                  name={pokemon.name}
                   id={pokemon.id}
+                  name={pokemon.name}
                   image={pokemon.image}
                 />
               );

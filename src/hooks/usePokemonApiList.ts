@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 
+import request from "../services/request";
+
 interface PokemonListData {
+  id: number;
   name: string;
   url: string;
   image: string;
-  id: string;
 }
 
 interface PokemonListResponse {
@@ -17,8 +19,10 @@ interface PokemonListResponse {
 export default function usePokemonApiList(initialPage: number) {
   const [page, setPage] = useState(initialPage);
 
-  const fetchPokemonList = (page: number): Promise<PokemonListResponse> =>
-    fetch(
+  const fetchPokemonList = async (
+    page: number
+  ): Promise<PokemonListResponse> => {
+    const response = await request<PokemonListResponse>(
       "https://pokeapi.co/api/v2/pokemon?limit=12&offset=" + (page - 1) * 12,
       {
         method: "GET",
@@ -27,23 +31,29 @@ export default function usePokemonApiList(initialPage: number) {
           "Cache-Control": "no-cache",
         },
       }
-    )
-      .then((res) => res.json())
-      .then((response) => {
-        const pokemontList = response.results.map(
-          (pokemon: PokemonListData) => {
-            const url = pokemon.url;
-            const segments = url.split("/");
-            const id = segments.pop() || segments.pop();
-            const image =
-              "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" +
-              id +
-              ".png";
-            return { ...pokemon, id: id, image: image };
-          }
-        );
-        return { ...response, results: pokemontList };
-      });
+    );
+
+    const pokemontList = response.results.map((pokemon) => {
+      const url = pokemon.url;
+
+      // get id by url
+      let id = 0;
+      const segments = url.split("/");
+      const tempId = segments.pop() || segments.pop();
+      if (tempId && tempId != undefined) {
+        id = parseInt(tempId);
+      }
+
+      // compose image url by id
+      const image =
+        "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/" +
+        id +
+        ".png";
+      return { ...pokemon, id: id, image: image };
+    });
+
+    return { ...response, results: pokemontList };
+  };
 
   useEffect(() => {
     if (initialPage <= 0) {

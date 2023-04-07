@@ -1,8 +1,8 @@
 import Head from "next/head";
 
-import PokemonList from "@/components/list/PokemonList";
+import FavoriteList from "../components/list/FavoriteList";
 
-export default function Home() {
+const FavoritePage = () => {
   return (
     <>
       <Head>
@@ -11,7 +11,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <PokemonList />
+      <FavoriteList />
     </>
   );
-}
+};
+
+export default FavoritePage;
